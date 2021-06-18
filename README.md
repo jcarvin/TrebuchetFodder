@@ -27,3 +27,7 @@ Obviously all of this will change. This is just an exercise to learn about twitc
   - There, you will see all of the extensions that you've created. They're likely all listed in 'testing' mode. I'm pretty sure, but not 100%, that you can select any of these, and they'll all just be pulling from your `https://localhost:8080`. So install one to your page! I installed as a `panel` because I don't think we're going to need an overlay right now.
 - Now just go check out your chanel page! You should see the panel. 
 - In vscode (or whatever editor you're using) navigate to `App.js` and edit the displayed text. *Voila!* Hot reload! 
+
+
+##### Additional Resources: 
+* [Front End API reference doc](https://dev.twitch.tv/docs/extensions/reference)
