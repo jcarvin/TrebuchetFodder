@@ -1,7 +1,7 @@
 {
   "allowHttpBackend": false,
-  "backendCommand": "./ebs",
-  "backendFolderName": "animal-facts/ebs",
+  "backendCommand": "",
+  "backendFolderName": "",
   "certificateExceptions": [],
   "extensionViews": [],
   "manifest": {
@@ -72,8 +72,8 @@
     "whitelistedConfigUrls": [],
     "whitelistedPanelUrls": []
   },
-  "frontendCommand": "npm run start",
-  "frontendFolderName": "animal-facts",
+  "frontendCommand": "",
+  "frontendFolderName": "",
   "name": "TrebuchetFodder",
   "usingRandomFrontendHostingPort": false,
   "version": 3
