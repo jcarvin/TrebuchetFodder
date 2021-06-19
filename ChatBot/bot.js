@@ -34,7 +34,8 @@ function onMessageHandler(channel, context, msg, self) {
   const commandName = messageArray[0];
 
   // If the command is known, let's execute it
-  if (/!d\d/.test(commandName)) { // !d20 | !d999999999 | pretty much anything !d{number}
+  if (/!d\d/.test(commandName)) {
+    // !d20 | !d999999999 | pretty much anything !d{number}
     const num = rollDice(commandName);
     client.say(channel, `You rolled a ${num}.`);
     console.log(`* Executed ${commandName} command`);
@@ -44,6 +45,7 @@ function onMessageHandler(channel, context, msg, self) {
     const message = messageArray.slice(2, messageArray.length).join(' ');
     // send the message to the specified channel
     client.say(channelName, `From ${channel}'s chat: "${message}"`);
+    console.log(`From ${channel}'s chat: "${message}" To: ${channelName}`);
     // let the host channel know that the message has been sent
     client.say(
       channel,
@@ -66,3 +68,52 @@ function rollDice(commandName) {
 function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
+
+// ----------- websocket
+const webSocketsServerPort = 8082;
+const webSocketServer = require('websocket').server;
+const http = require('http');
+// Spinning the http server and the websocket server.
+const server = http.createServer();
+server.listen(webSocketsServerPort);
+const wsServer = new webSocketServer({
+  httpServer: server,
+});
+// I'm maintaining all active connections in this object
+const clients = {};
+
+// This code generates unique userid for everyuser.
+const getUniqueID = () => {
+  const s4 = () =>
+    Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  return s4() + s4() + '-' + s4();
+};
+
+wsServer.on('request', function (request) {
+  var userID = getUniqueID();
+  console.log(
+    new Date() +
+      ' Recieved a new connection from origin ' +
+      request.origin +
+      '.'
+  );
+  // You can rewrite this part of the code to accept only the requests from allowed origin
+  const connection = request.accept(null, request.origin);
+  clients[userID] = connection;
+  console.log(
+    'connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients)
+  );
+  connection.send('hey');
+  console.log('sent message');
+});
+
+wsServer.on('connect', (socket) => {
+  socket.on('message', function incoming(data) {
+    console.log(data);
+    // if you want to send that message back to the client who sent it,
+    // you can use send method on the socket
+    socket.send(data);
+  });
+});
