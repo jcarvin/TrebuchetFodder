@@ -1,6 +1,12 @@
 'use es6';
 
-import React, { Fragment, useCallback, useEffect, useMemo } from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
@@ -11,16 +17,28 @@ client.onopen = () => {
 client.onerror = (error) => {
   console.log(`WebSocket error: ${error}`);
 };
-client.onmessage = (message) => {
-  console.log('websocket message: ', message, JSON.parse(message.data));
-};
 
 const WebsocketConnector = ({}) => {
+  const [displayText, setDisplayText] = useState('Websocket Time!');
+
   useEffect(() => {
+    client.onmessage = handleWebsocketMessages;
     client.send('Component has mounted');
   }, []);
 
-  return <Fragment>WebSocket Time</Fragment>;
+  const handleWebsocketMessages = useCallback((message) => {
+    const socketMessage = JSON.parse(message.data);
+    console.log('websocket message: ', socketMessage);
+    switch (socketMessage.type) {
+      case 'msg':
+        setDisplayText(socketMessage.data);
+        return;
+      default:
+        return;
+    }
+  }, []);
+
+  return <Fragment>{displayText}</Fragment>;
 };
 
 WebsocketConnector.propTypes = {};
