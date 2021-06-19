@@ -1,5 +1,6 @@
 import React from 'react';
 import Authentication from '../../util/Authentication/Authentication';
+import WebsocketConnector from '../Websocket/WebsocketConnector';
 
 import './App.css';
 
@@ -104,6 +105,7 @@ export default class App extends React.Component {
               .
             </p> */}
             <p>Trebuchet Fodder!!!</p>
+            <WebsocketConnector />
           </div>
         </div>
       );
