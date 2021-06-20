@@ -23,7 +23,6 @@ const App = ({}) => {
   }, []);
 
   useEffect(() => {
-    console.log('auth', Auth);
     if (twitch) {
       twitch.onAuthorized((auth) => {
         Auth.setToken(auth.token, auth.userId);
@@ -59,18 +58,6 @@ const App = ({}) => {
         twitch.unlisten('broadcast', () => console.log('unlistened'));
       }
     };
-  }, []);
-
-  const handleWebsocketMessages = useCallback((message) => {
-    const socketMessage = JSON.parse(message.data);
-    console.log('websocket message: ', socketMessage);
-    switch (socketMessage.type) {
-      case 'msg':
-        setDisplayText(socketMessage.data);
-        return;
-      default:
-        return;
-    }
   }, []);
 
   return !loading && isVisible ? (
